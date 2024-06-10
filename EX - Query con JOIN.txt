@@ -1,0 +1,68 @@
+USE db_university
+
+#	1. Selezionare tutti gli studenti iscritti al Corso di Laurea in Economia
+
+SELECT s.name, s.surname, d.name 
+FROM students s 
+JOIN degrees d ON s.degree_id = d.id
+WHERE d.name LIKE "Corso di Laurea in Economia";
+
+#	2. Selezionare tutti i Corsi di Laurea Magistrale del Dipartimento di Neuroscienze
+
+SELECT *
+FROM degrees deg
+JOIN departments dep ON deg.department_id=dep.id
+WHERE deg.name like "%Magistrale%" AND dep.name LIKE "%Neuroscienze";
+
+
+#	3. Selezionare tutti i corsi in cui insegna Fulvio Amato (id=44)
+
+SELECT *
+FROM courses c 
+JOIN course_teacher ct ON c.id = ct.course_id 
+WHERE ct.teacher_id = 44;
+
+
+/*	4. Selezionare tutti gli studenti con i dati relativi al corso di laurea a cui sono iscritti e il 
+*	relativo dipartimento, in ordine alfabetico per cognome e nome
+*/
+
+SELECT s.surname, s.name, d.name as "Corso di laurea", d.department_id
+FROM students s 
+JOIN degrees d ON s.degree_id = d.id
+ORDER BY s.surname, s.name;
+
+
+#	5. Selezionare tutti i corsi di laurea con i relativi corsi e insegnanti
+
+SELECT D.name AS "Corso di laurea", c.name as "Nome corso", c.period, c.year, c.cfu, t.name as "Nome insegnante", t.surname as "Cognome insegnante"
+FROM course_teacher ct 
+JOIN courses c ON C.ID=CT.course_id 
+JOIN teachers t ON T.ID =CT.teacher_id
+JOIN degrees d ON C.degree_id =D.ID
+order by year, period;
+
+
+
+#	6. Selezionare tutti i docenti che insegnano nel Dipartimento di Matematica (54)
+SELECT T.SURNAME, T.NAME
+FROM teachers t 
+JOIN course_teacher ct ON CT.teacher_id =T.id 
+JOIN courses c ON C.ID=CT.course_id 
+JOIN degrees d ON D.ID=C.degree_id 
+WHERE D.department_id = 5
+ORDER BY T.SURNAME, T.name;
+
+
+
+/*	7. BONUS: Selezionare per ogni studente quanti tentativi d’esame ha sostenuto per superare
+ * 	ciascuno dei suoi esami
+*/
+
+SELECT S.registration_number, C.name , COUNT(*) 
+FROM exam_student es 
+JOIN students s ON ES.student_id =S.id
+JOIN exams e ON E.ID=ES.exam_id 
+JOIN courses c ON C.ID=E.course_id 
+GROUP BY S.registration_number ,C.NAME
+ORDER BY COUNT(ES.VOTE) DESC ;
