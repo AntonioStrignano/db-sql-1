@@ -1,0 +1,51 @@
+USE db_university;
+
+SELECT *
+FROM teachers t ;
+
+SELECT head_of_department 
+FROM departments d ;
+
+SELECT *
+FROM degrees d 
+WHERE name LIKE "%Magistrale%";
+
+SELECT *
+FROM students s
+WHERE name LIKE "Marco";
+
+SELECT *
+FROM courses c 
+WHERE cfu >= 12;
+
+SELECT *
+FROM courses c 
+WHERE cfu > 10 OR CFU < 5;
+
+SELECT degree_id, COUNT(degree_id) as "n. degrees"
+FROM courses c 
+WHERE PERIOD = 'I semestre' AND `year` = 1
+GROUP BY degree_id;
+
+SELECT *
+FROM courses c 
+WHERE c.website IS NULL ;
+
+SELECT *
+FROM teachers t 
+WHERE phone IS NOT NULL;
+
+
+		#BONUS
+
+SELECT *
+FROM students s 
+WHERE NAME LIKE "E%";
+
+SELECT COUNT(NAME) 
+FROM teachers t 
+WHERE NAME LIKE "E%";
+
+SELECT COUNT(ID)
+FROM teachers t 
+WHERE phone IS NULL;
